@@ -50,11 +50,11 @@ prediction_loss = [None] *batch_num
 test_loss = [None]*batch_num
 for i in range(batch_num):
     model = SRCNN(kernel1,kernel2,kernel3)
-    model.load_state_dict(torch.load('/scratch/student/gangu/dl-turbulence-master/DL-turbulence/pure_data/9-5-5_32ch(10-02)/checkpoint_epoch_290_955_32ch.pth'))
+    model.load_state_dict(torch.load('/home/student/Documents/Gangu_project/model/srcnn_955.pth'))
     model.cuda(1)
     for j in range(batch_size):
-        test = h5.File('/home/student/Downloads/timestep_26429/filter_width_16/u_filter_955/u_filter_'+str(j+(batch_size*i))+'.h5', 'r')
-        target = h5.File('/home/student/Downloads/timestep_26429/filter_width_16/u/u_'+str(j+(batch_size*i))+'.h5', 'r') 
+        test = h5.File('/home/student/Documents/Gangu_project/data/u_filter_test/u_filter_'+str(j+(batch_size*i))+'.h5', 'r')
+        target = h5.File('/home/student/Documents/Gangu_project/data/test_target_u/u_'+str(j+(batch_size*i))+'.h5', 'r') 
         
         test_data_np[j,0,:,:,:] = test['u'][:]
         target_data_np[j,0,:,:,:] = target['u'][:]
@@ -119,21 +119,21 @@ target_w = merge.merge(tp_w)
 plt.figure()
 plt.imshow(input_data,vmin = -3,vmax =3 )
 plt.colorbar()
-plt.savefig('/home/student/Desktop/results/975_32ch_240/input_u.eps', format='eps')
-plt.savefig('/home/student/Desktop/results/975_32ch_240/input_u.png')
+plt.savefig('/home/student/Desktop/results/955_32ch/input_u.eps', format='eps')
+plt.savefig('/home/student/Desktop/results/955_32ch/input_u.png')
 
 plt.figure()
 plt.imshow(output_u,vmin = -3,vmax =3 )
 plt.colorbar()
-plt.savefig('/home/student/Desktop/results/975_32ch_240/output_u.eps', format='eps')
-plt.savefig('/home/student/Desktop/results/975_32ch_240/output_u.png')
+plt.savefig('/home/student/Desktop/results/955_32ch/output_u.eps', format='eps')
+plt.savefig('/home/student/Desktop/results/955_32ch/output_u.png')
 #
 #
 plt.figure()
 plt.imshow(target_u,vmin = -3,vmax =3 )
 plt.colorbar()
-plt.savefig('/home/student/Desktop/results/975_32ch_240/target_u.eps', format='eps')
-plt.savefig('/home/student/Desktop/results/975_32ch_240/target_u.png')
+plt.savefig('/home/student/Desktop/results/955_32ch/target_u.eps', format='eps')
+plt.savefig('/home/student/Desktop/results/955_32ch/target_u.png')
 #
 #%%target output off-diagonal part SGS stress tensor
 target_uv = target_u *target_v
@@ -148,8 +148,8 @@ tau_target = target_uv_filter - (target_u_filter*target_v_filter)
 plt.figure()
 plt.imshow(tau_target,vmin = -0.1,vmax =0.1 )
 plt.colorbar()
-plt.savefig('/home/student/Desktop/results/975_32ch_240/tau_12_target.eps', format='eps')
-plt.savefig('/home/student/Desktop/results/975_32ch_240/tau_12_target.png')
+plt.savefig('/home/student/Desktop/results/955_32ch/tau_12_target.eps', format='eps')
+plt.savefig('/home/student/Desktop/results/955_32ch/tau_12_target.png')
 
 #%%target diagonal part SGS stress tensor(with trace removal)
 target_uu = target_u *target_u
@@ -178,8 +178,8 @@ tau_11_k = tau_11 - k
 plt.figure()
 plt.imshow(tau_11_k,vmin = -0.1,vmax =0.1 )
 plt.colorbar()
-plt.savefig('/home/student/Desktop/results/975_32ch_240/tau_11_target.eps', format='eps')
-plt.savefig('/home/student/Desktop/results/975_32ch_240/tau_11_target.png')
+plt.savefig('/home/student/Desktop/results/955_32ch/tau_11_target.eps', format='eps')
+plt.savefig('/home/student/Desktop/results/955_32ch/tau_11_target.png')
 #%% output off-diagonal part SGS stress tensor
 output_uv = output_u *output_v
  
@@ -196,8 +196,8 @@ tau_output = output_uv_filter - (output_u_filter*output_v_filter)
 plt.figure()
 plt.imshow(tau_output,vmin = -0.1,vmax =0.1 )
 plt.colorbar()
-plt.savefig('/home/student/Desktop/results/975_32ch_240/tau_12_output.eps', format='eps')
-plt.savefig('/home/student/Desktop/results/975_32ch_240/tau_12_output.png')
+plt.savefig('/home/student/Desktop/results/955_32ch/tau_12_output.eps', format='eps')
+plt.savefig('/home/student/Desktop/results/955_32ch/tau_12_output.png')
 
 
 #%% output diagonal part SGS stress tensor(with trace removal)
@@ -228,8 +228,8 @@ output_tau_11_k = tau_output_11 - k
 plt.figure()
 plt.imshow(output_tau_11_k,vmin = -0.1,vmax =0.1)
 plt.colorbar()
-plt.savefig('/home/student/Desktop/results/975_32ch_240/tau_11_output.eps', format='eps')
-plt.savefig('/home/student/Desktop/results/975_32ch_240/tau_11_output.png')
+plt.savefig('/home/student/Desktop/results/955_32ch/tau_11_output.eps', format='eps')
+plt.savefig('/home/student/Desktop/results/955_32ch/tau_11_output.png')
 #%% calculate psnr and correlation coefficient of the reconstructed and original SGS stress tensor(off-diagonal)
 target = torch.from_numpy(tau_target)
 output = torch.from_numpy(tau_output)

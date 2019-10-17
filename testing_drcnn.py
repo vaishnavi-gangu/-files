@@ -8,20 +8,9 @@ Created on Sun Aug  4 20:26:41 2019
 import torch
 import numpy as np
 import torch.nn as nn 
-#from srcnn_3_6ch_nopadding import ResCNN
-from srcnn_nopadding import SRCNN
-import torch.optim as optim
 import h5py as h5
-from torch.utils import data
-from torch.autograd import Variable
 import matplotlib.pyplot as plt
-import math
-import checkpoint as ch
-from torch.utils.data import DataLoader
-from sklearn.utils import shuffle
-from scipy.ndimage import gaussian_filter
-import time
-import torch.nn.functional as F 
+import math 
 import merge_parameter_64cores as merge
 
 
@@ -60,7 +49,7 @@ tp_tau_11 = [None] * batch_num
 tp_tau_22 = [None] * batch_num
 tp_tau_33 = [None] * batch_num
 
-model= torch.load('/scratch/student/gangu/dl-turbulence-master/DL-turbulence/pure_data/3layer_drcnn_955_ij/epoch_290_955_ij.pth')
+model= torch.load('/home/student/Documents/Gangu_project/model/drcnn_955.pth')
 model.cuda(0)
 
 
@@ -74,9 +63,9 @@ prediction_loss = [None] *batch_num
 test_loss = [None]*batch_num
 for i in range(batch_num):
     for j in range(batch_size):
-        test = h5.File('/home/student/Downloads/timestep_26429/filter_width_16/u_filter_955/u_filter_'+str(j+(batch_size*i))+'.h5', 'r')
-        target1 = h5.File('/home/student/Downloads/timestep_26429/filter_width_16/tau_ij/tau_ij_'+str(j+(batch_size*i))+'.h5', 'r') 
-        target2 = h5.File('/home/student/Downloads/timestep_26429/filter_width_16/tau_ii/tau_ii_'+str(j+(batch_size*i))+'.h5', 'r')
+        test = h5.File('/home/student/Documents/Gangu_project/data/u_filter_test/u_filter_'+str(j+(batch_size*i))+'.h5', 'r')
+        target1 = h5.File('/home/student/Documents/Gangu_project/data/test_off_diagonal_tau/tau_ij_'+str(j+(batch_size*i))+'.h5', 'r') 
+        target2 = h5.File('/home/student/Documents/Gangu_project/data/test_diagonal_tau/tau_ii_'+str(j+(batch_size*i))+'.h5', 'r')
         
         test_data_np[j,0,:,:,:] = test['u'][:]
         target_data_np[j,0,:,:,:] = target1['T12'][:]
@@ -145,15 +134,15 @@ target_33 = merge.merge(tp_tau_33)
 plt.figure()
 plt.imshow(input_data,vmin = -3,vmax =3)
 plt.colorbar()
-plt.savefig('/home/student/Desktop/results/955_drcnn_Tij/input.eps', format='eps')
-plt.savefig('/home/student/Desktop/results/955_drcnn_Tij/input.png')
+plt.savefig('/home/student/Desktop/results/955_drcnn955_32ch/input.eps', format='eps')
+plt.savefig('/home/student/Desktop/results/955_drcnn955_32ch/input.png')
 
 #%%
 plt.figure()
 plt.imshow(output_31,vmin = -0.1,vmax =0.1)
 plt.colorbar()
-plt.savefig('/home/student/Desktop/results/955_drcnn_Tij/output_tau31_z20.eps', format='eps')
-plt.savefig('/home/student/Desktop/results/955_drcnn_Tij/output_tau31_z20.png')
+plt.savefig('/home/student/Desktop/results/955_drcnn955_32ch/output_tau31_z20.eps', format='eps')
+plt.savefig('/home/student/Desktop/results/955_drcnn955_32ch/output_tau31_z20.png')
 
 #%%
 
@@ -161,8 +150,8 @@ plt.savefig('/home/student/Desktop/results/955_drcnn_Tij/output_tau31_z20.png')
 plt.figure
 plt.imshow(target_31,vmin = -0.1,vmax =0.1)
 plt.colorbar()
-plt.savefig('/home/student/Desktop/results/955_drcnn_Tij/target_tau31_z20.eps', format='eps')
-plt.savefig('/home/student/Desktop/results/955_drcnn_Tij/target_tau31_z20.png')
+plt.savefig('/home/student/Desktop/results/955_drcnn955_32ch/target_tau31_z20.eps', format='eps')
+plt.savefig('/home/student/Desktop/results/955_drcnn955_32ch/target_tau31_z20.png')
 
 
 #%%
@@ -170,7 +159,7 @@ plt.savefig('/home/student/Desktop/results/955_drcnn_Tij/target_tau31_z20.png')
 plt.figure
 plt.imshow((output_31 - target_31),vmin = -0.1,vmax =0.1)
 plt.colorbar()
-plt.savefig('/home/student/Desktop/results/955_drcnn_Tij/difference_tau31_z20.png')
+plt.savefig('/home/student/Desktop/results/955_drcnn955_32ch/difference_tau31_z20.png')
 #%%
 target = torch.from_numpy(target_31)
 output = torch.from_numpy(output_31)

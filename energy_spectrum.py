@@ -11,9 +11,9 @@ import time as tt
 import matplotlib.pyplot as plt
 import h5py as h5
 
-filename1='/home/student/Downloads/timestep_26429/u_26429.h5'
-filename2='/home/student/Downloads/timestep_26429/v_26429.h5'
-filename3='/home/student/Downloads/timestep_26429/w_26429.h5'
+filename1='/home/student/Documents/Gangu_project/data/u_train.h5'
+filename2='/home/student/Documents/Gangu_project/data/v_train.h5'
+filename3='/home/student/Documents/Gangu_project/data/w_train.h5'
 
 
 f = h5.File(filename1, 'r')

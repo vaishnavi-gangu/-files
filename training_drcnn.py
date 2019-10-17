@@ -53,9 +53,9 @@ def test(model):
     for j in range(batch_num):
         counter = 0
         for i in range(total_size,total_size+batch_size):
-            test = h5.File('/scratch/student/gangu/dl-turbulence-master/DL-turbulence/pure_data/timestep_0/filter_16/u_filter_955/u_filter_'+str(i+batch_size*j)+'.h5', 'r')
-            target1 = h5.File('/scratch/student/gangu/dl-turbulence-master/DL-turbulence/pure_data/timestep_0/filter_16/tau_ij/tau_ij_'+str(i+batch_size*j)+'.h5', 'r')
-            target2 = h5.File('/scratch/student/gangu/dl-turbulence-master/DL-turbulence/pure_data/timestep_0/filter_16/tau_ii/tau_ii_'+str(i+batch_size*j)+'.h5', 'r')
+            test = h5.File('/home/student/Documents/Gangu_project/data/u_filter_train/u_filter_'+str(i+batch_size*j)+'.h5', 'r')
+            target1 = h5.File('/home/student/Documents/Gangu_project/data/train_off_diagonal_tau/tau_ij_'+str(i+batch_size*j)+'.h5', 'r')
+            target2 = h5.File('/home/student/Documents/Gangu_project/data/train_diagonal_tau/tau_ii_'+str(i+batch_size*j)+'.h5', 'r')
             
             test_data_np[counter,0,:,:,:] = test['u'][:]
             test_data_np[counter,1,:,:,:] = test['v'][:]
@@ -98,9 +98,9 @@ for epoch in range(num_epochs):
         target_data_np = np.zeros((batch_size,6,coresize,coresize,coresize))
         for j,item in enumerate(batch_list):
             
-            train = h5.File('/scratch/student/gangu/dl-turbulence-master/DL-turbulence/pure_data/timestep_0/filter_16/u_filter_955/u_filter_'+str(i+batch_size*j)+'.h5', 'r')
-            target1 = h5.File('/scratch/student/gangu/dl-turbulence-master/DL-turbulence/pure_data/timestep_0/filter_16/tau_ij/tau_ij_'+str(i+batch_size*j)+'.h5', 'r')
-            target2 = h5.File('/scratch/student/gangu/dl-turbulence-master/DL-turbulence/pure_data/timestep_0/filter_16/tau_ii/tau_ii_'+str(i+batch_size*j)+'.h5', 'r') 
+            train = h5.File('/home/student/Documents/Gangu_project/data/u_filter_train/u_filter_'+str(i+batch_size*j)+'.h5', 'r')
+            target1 = h5.File('/home/student/Documents/Gangu_project/data/train_off_diagonal_tau/tau_ij_'+str(i+batch_size*j)+'.h5', 'r')
+            target2 = h5.File('/home/student/Documents/Gangu_project/data/train_diagonal_tau/tau_ii_'+str(i+batch_size*j)+'.h5', 'r') 
             
             train_data_np[j,0,:,:,:] = train['u'][:]
             train_data_np[j,1,:,:,:] = train['v'][:]

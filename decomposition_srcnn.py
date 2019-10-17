@@ -15,11 +15,16 @@ import index
 import core as core
 from scipy.ndimage import gaussian_filter
 
-#%%load data 
-filename1='/home/student/Downloads/timestep_26429/u_26429.h5'
-filename2='/home/student/Downloads/timestep_26429/v_26429.h5'
-filename3='/home/student/Downloads/timestep_26429/w_26429.h5'
+#%%
+#load training data
+filename1='/home/student/Documents/Gangu_project/data/u_train.h5'
+filename2='/home/student/Documents/Gangu_project/data/v_train.h5'
+filename3='/home/student/Documents/Gangu_project/data/w_train.h5'
 
+#load test data
+#filename1='/home/student/Documents/Gangu_project/data/u_test.h5'
+#filename2='/home/student/Documents/Gangu_project/data/v_test.h5'
+#filename3='/home/student/Documents/Gangu_project/data/w_test.h5'
 
 f = h5.File(filename1, 'r')
 U = f['u'][:]
@@ -27,7 +32,6 @@ f = h5.File(filename2, 'r')
 V = f['v'][:]
 f = h5.File(filename3, 'r')
 W = f['w'][:]
-
 #%%
 data_size = round(U.size**(1/3))
 print((data_size))
@@ -85,20 +89,32 @@ w_cores = core.allcore(W,ix,coresize,kernal_width_total)
 num_of_filtered_velocity_files = len(u_cores)
 
 #%%save data
+#training data
 for i in range(0,num_of_filtered_velocity_files):
     print("creating training data: ",i)
-    with h5.File('/home/student/Downloads/timestep_26429/filter_width_16/u_filter_955/u_filter_'+str(i)+'.h5', 'w') as hf:
+    with h5.File('/home/student/Documents/Gangu_project/data/u_filter_train/u_filter_'+str(i)+'.h5', 'w') as hf:
         hf.create_dataset('u', data = u_cores[i])
         hf.create_dataset('v', data = v_cores[i])
         hf.create_dataset('w', data = w_cores[i])
-
+        
+#test data
+#for i in range(0,num_of_filtered_velocity_files):
+#    print("creating training data: ",i)
+#    with h5.File('/home/student/Documents/Gangu_project/data/u_filter_test/u_filter_'+str(i)+'.h5', 'w') as hf:
+#        hf.create_dataset('u', data = u_cores[i])
+#        hf.create_dataset('v', data = v_cores[i])
+#        hf.create_dataset('w', data = w_cores[i])
 
 #%%TARGET DATA
-#load data
-filename1='/home/student/Downloads/timestep_26429/u_26429.h5'
-filename2='/home/student/Downloads/timestep_26429/v_26429.h5'
-filename3='/home/student/Downloads/timestep_26429/w_26429.h5'
+#load training data
+filename1='/home/student/Documents/Gangu_project/data/u_train.h5'
+filename2='/home/student/Documents/Gangu_project/data/v_train.h5'
+filename3='/home/student/Documents/Gangu_project/data/w_train.h5'
 
+#load test data
+#filename1='/home/student/Documents/Gangu_project/data/u_test.h5'
+#filename2='/home/student/Documents/Gangu_project/data/v_test.h5'
+#filename3='/home/student/Documents/Gangu_project/data/w_test.h5'
 
 f = h5.File(filename1, 'r')
 U = f['u'][:]
@@ -150,13 +166,22 @@ for i in range(len(target_u)):
     target_w[i] = W_target[i][start:end,start:end,start:end]
     
 #%%save data
+#save training data
 num_of_target_velocity_files = len(target_u)
 for j in range(0,num_of_target_velocity_files):
     print("creating target data: ",j)
-    with h5.File('/home/student/Downloads/timestep_26429/filter_width_16/u_975/u_'+str(j)+'.h5', 'w') as hf:
+    with h5.File('/home/student/Documents/Gangu_project/data/training_target_u/u_'+str(j)+'.h5', 'w') as hf:
         hf.create_dataset('u', data = target_u[j])
         hf.create_dataset('v', data = target_v[j])
         hf.create_dataset('w', data = target_w[j])
+       
+#save test data
+#for j in range(0,num_of_target_velocity_files):
+#    print("creating target data: ",j)
+#    with h5.File('/home/student/Documents/Gangu_project/data/test_target_u/u_'+str(j)+'.h5', 'w') as hf:
+#        hf.create_dataset('u', data = target_u[j])
+#        hf.create_dataset('v', data = target_v[j])
+#        hf.create_dataset('w', data = target_w[j])
 #%%
 plt.figure()
 plt.imshow(u_cores[110][8,8:136,8:136])
